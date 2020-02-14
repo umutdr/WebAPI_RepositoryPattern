@@ -9,6 +9,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.EntityFrameworkCore;
+using WebAPI_RepositoryPattern.Data;
+using WebAPI_RepositoryPattern.Data.EFCore;
 
 namespace WebAPI_RepositoryPattern
 {
@@ -25,6 +28,13 @@ namespace WebAPI_RepositoryPattern
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+
+            services.AddDbContext<DataContext>(options =>
+                    options.UseSqlServer(Configuration.GetConnectionString("DataContext")));
+
+            services.AddScoped<EfCoreMovieRepository>();
+
+            services.AddScoped<EfCoreStarRepository>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
